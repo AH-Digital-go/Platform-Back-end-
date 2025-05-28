@@ -1,98 +1,256 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🚀 ahdigital Platform - MCD & Architecture
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+> **Plateforme SaaS Multi-Tenant pour Agences Marketing** *(inspirée GoHighLevel)*
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue.svg)](https://www.typescriptlang.org/)
+[![NestJS](https://img.shields.io/badge/NestJS-10+-red.svg)](https://nestjs.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-blue.svg)](https://postgresql.org/)
 
-## Description
+## 🎯 Architecture Multi-Tenant
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ npm install
+```
+ahdigital
+├── Agency (nos clients)
+│   ├── SubAccount (clients des agences) 
+│   │   ├── Contacts
+│   │   ├── Funnels
+│   │   └── Workflows
+└── Users (avec rôles différents)
 ```
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ npm run start
+## 🛠️ Stack Technique
 
-# watch mode
-$ npm run start:dev
+**Backend Core:**
+- **Framework:** NestJS + TypeScript
+- **Base de données:** PostgreSQL (principal) + MongoDB (messages)
+- **Cache/Queue:** Redis + BullMQ
+- **Search:** ElasticSearch
+- **Storage:** AWS S3
 
-# production mode
-$ npm run start:prod
+**Intégrations:**
+- **Auth:** JWT + OAuth2 + Passport.js
+- **Communications:** Twilio (SMS) + Mailgun (Email) + WhatsApp API
+- **Paiements:** Stripe + PayPal API
+- **Infrastructure:** Docker + Kubernetes + NGINX
+
+**Architecture Backend:**
+```
+[Frontend SPA] ↔ [API Gateway/NestJS]
+                        ↓
+┌─────────────────────────────────┐
+│     Backend Modules             │
+│ Auth | CRM | Workflows | Chat   │
+│ Calendar | Funnels | Payments   │
+└─────────────────────────────────┘
+         ↓         ↓         ↓
+   PostgreSQL   MongoDB    Redis
+         ↓
+[Twilio, Stripe, WhatsApp APIs]
 ```
 
-## Run tests
+---
 
-```bash
-# unit tests
-$ npm run test
+## 📦 Entités Principales
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+### 🏢 **Agency**
+```sql
+agency_id (PK)
+agency_name
+contact_email
+phone, address, city
+logo, creation_date, status
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+### 🏪 **SubAccount** 
+```sql
+sub_account_id (PK)
+agency_id (FK) → Agency
+sub_account_name
+industry, contact_email
+creation_date, status
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 👤 **User**
+```sql
+user_id (PK)
+email, password_hash
+first_name, last_name
+phone, creation_date, status
+```
 
-## Resources
+### 🎯 **Funnel**
+```sql
+funnel_id (PK)
+sub_account_id (FK) → SubAccount
+funnel_name, description
+type (acquisition/conversion/retention)
+status, creation_date
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+### 📍 **FunnelStage**
+```sql
+stage_id (PK)
+funnel_id (FK) → Funnel
+stage_name, description
+order, estimated_duration
+auto_actions (JSON)
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### 👥 **Contact**
+```sql
+contact_id (PK)
+sub_account_id (FK) → SubAccount
+first_name, last_name
+email, phone, company
+source, tags (JSON)
+creation_date
+```
 
-## Support
+### 🎯 **Lead**
+```sql
+lead_id (PK)
+contact_id (FK) → Contact
+stage_id (FK) → FunnelStage
+score (0-100)
+temperature (hot/warm/cold)
+entry_date, assigned_to
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### 💼 **Deal**
+```sql
+deal_id (PK)
+contact_id (FK) → Contact
+lead_id (FK) → Lead
+title, amount, probability
+creation_date, closing_date
+status (open/won/lost)
+```
 
-## Stay in touch
+### ⚙️ **Workflow**
+```sql
+workflow_id (PK)
+agency_id (FK) → Agency
+sub_account_id (FK) → SubAccount
+name, description
+status, run_count
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### 🔔 **Trigger**
+```sql
+trigger_id (PK)
+workflow_id (FK) → Workflow
+trigger_type (event/schedule/webhook)
+event_source, activation_rules (JSON)
+is_active
+```
 
-## License
+### ✅ **Action**
+```sql
+action_id (PK)
+workflow_id (FK) → Workflow
+trigger_id (FK) → Trigger
+action_type (send_email/create_task/etc)
+action_details (JSON)
+execution_order, delay
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
+
+## 🔗 Relations Clés
+
+### **Hiérarchie**
+- `Agency` (1) → `SubAccount` (N)
+- `SubAccount` (1) → `Funnel` (N)
+- `Funnel` (1) → `FunnelStage` (N)
+
+### **Leads & Conversion**
+- `Contact` (1) → `Lead` (N)
+- `Lead` (1) → `Deal` (1)
+- `FunnelStage` (1) → `Lead` (N)
+
+### **Automation**
+- `Workflow` (1) → `Trigger` (N)
+- `Workflow` (1) → `Action` (N)
+- `Lead` → déclenche → `Workflow`
+
+---
+
+## 🎮 Exemple Concret
+
+### Restaurant "Pizza Luigi"
+```sql
+-- 1. Agence crée sous-compte
+INSERT INTO SubAccount (agency_id, name) 
+VALUES (1, 'Pizza Luigi');
+
+-- 2. Funnel réservation
+INSERT INTO Funnel (sub_account_id, name, type) 
+VALUES (1, 'Réservation table', 'conversion');
+
+-- 3. Étapes du funnel
+INSERT INTO FunnelStage (funnel_id, name, order) 
+VALUES 
+(1, 'Formulaire rempli', 1),
+(1, 'Contact confirmé', 2),
+(1, 'Réservation confirmée', 3);
+```
+
+### Flow automatisé
+```
+Sophie remplit formulaire
+↓
+Contact créé
+↓
+Lead créé (étape "Formulaire rempli")
+↓
+Workflow "Nouveau lead" déclenché
+↓
+Actions: Email Sophie + SMS restaurant + Tâche
+```
+
+---
+
+## 🛡️ Sécurité Multi-Tenant
+
+### Isolation des données
+```sql
+-- Toujours filtrer par agence
+SELECT * FROM contacts c
+JOIN sub_accounts sa ON c.sub_account_id = sa.id
+WHERE sa.agency_id = @current_agency_id;
+```
+
+### Rôles
+- **Agency Admin** : Tout sur son agence
+- **SubAccount Manager** : Tout sur ses sous-comptes
+- **User** : Permissions limitées
+
+---
+
+## 📊 Tables Secondaires
+
+### Communications
+- `Conversation` → `Message` → `Channel`
+- Centralise WhatsApp, Email, SMS, Chat
+
+### Calendar
+- `Event` → `EventType` → `Attendee` → `Reminder`
+
+### Reputation  
+- `Review` → `Rating` → `Customer`
+
+### Landing Pages
+- `Page` → `Section` → `Block` → `Form` → `Submission`
+
+---
+
+## 🔧 Contraintes Importantes
+
+1. **Un lead** ne peut être que dans **une étape** à la fois
+2. **Workflows** ne peuvent pas créer de **boucles infinies**
+3. **Emails** uniques par contexte (agency/sub-account)
+4. **Triggers** ont des **limites de fréquence**
+5. **Données** toujours **isolées par agence**
