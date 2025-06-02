@@ -15,6 +15,9 @@ export class User extends Document {
   @Prop({ default: true })
   active: boolean;
 
+  @Prop({ default: 'account-user' }) // roles: super-admin , ahd-staff , agency-owner , agency-admin , agency-user, account-admin , account-user
+  role: string;
+
   @Prop({ type: String, ref: 'Agency' })
   agencyId: string;
 
