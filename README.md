@@ -1,4 +1,74 @@
-# 🚀 ahdigital Platform - MCD & Architecture
+# AHD | SaaS CRM Backend
+
+Backend for the MVP SaaS platform built with NestJS and MongoDB.
+
+## 🛠 Tech Stack
+- NestJS
+- MongoDB (Mongoose)
+- JWT Auth
+
+## 🚀 Getting Started
+
+### 1. Clone the Repo
+```bash
+git clone https://github.com/your-org/your-repo.git
+cd backend
+npm install
+```
+### 2. Set Up Environment Variables
+
+copy .env.example to your .env file
+
+```bash
+cp .env.example .env
+```
+
+Make sure your .env.example is in the repo, and .env is ignored:
+
+```bash
+# .gitignore
+.env
+```
+
+### 3. Run Locally
+```bash
+npm run start:dev
+```
+
+### Requirements
+
+- Node.js 18+
+- MongoDB (local or Atlas)
+
+### git structure:
+
+main         → team pushes their work here (for dev and test)
+prod         → production (deployed or stable)
+feature      → Create your own branch for each feature
+
+```bash
+# PULL changes to your local machine first
+
+git pull origin main
+
+# Start a new task by creating a new branch
+git checkout -b new-feature
+
+# After coding
+git push origin new-feature
+
+# Then open a PR into main branch
+```
+
+
+### Additional infos
+
+you can visualize the DB using:
+- MongoDB Atlas
+- MongoDB Compass — official GUI
+- Studio 3T — advanced GUI
+
+# 🚀 ahdigital Platform | Architecture
 
 > **Plateforme SaaS Multi-Tenant pour Agences Marketing** *(inspirée GoHighLevel)*
 
