@@ -3,14 +3,19 @@ import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "src/users/users.service";
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from "src/users/dto/create-user.dto";
+import { User } from "src/users/schemas/user.schema";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+
+
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-  
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.usersService.findByEmail(email);
@@ -30,8 +35,10 @@ export class AuthService {
     const payload = { email: user.email, sub: user._id, role: user.role };
     return {
       access_token: this.jwtService.sign(payload),
+      requiresPasswordReset: user.mustChangePassword,
     };
   }
+
 
 async register(dto: CreateUserDto) {
   const hashedPassword = await bcrypt.hash(dto.password, 10);
@@ -50,6 +57,27 @@ async register(dto: CreateUserDto) {
 
   return this.login(createdUser);
 }
+
+
+async acceptInvite(user: User, password: string, name: string) {
+  user.username = name;
+  user.password = await bcrypt.hash(password, 10); // 🔐 direct hashing
+  user.status = 'active';
+  user.inviteToken = '';
+  user.mustChangePassword = false;
+  await user.save();
+}
+
+async changePassword( userId: string, newPassword: string) {
+  const hashed = await bcrypt.hash(newPassword, 10);;
+  await this.userModel.updateOne(
+    { _id: userId },
+    { password: hashed, mustChangePassword: false },
+  );
+}
+
+
+
  
 
 

@@ -95,9 +95,8 @@ ahdigital
 
 **Backend Core:**
 - **Framework:** NestJS + TypeScript
-- **Base de données:** PostgreSQL (principal) + MongoDB (messages)
+- **Base de données:** MongoDB (messages)
 - **Cache/Queue:** Redis + BullMQ
-- **Search:** ElasticSearch
 - **Storage:** AWS S3
 
 **Intégrations:**
