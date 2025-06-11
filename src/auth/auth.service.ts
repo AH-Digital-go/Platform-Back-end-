@@ -47,7 +47,7 @@ async register(dto: CreateUserDto) {
     email: dto.email,
     username: dto.username,
     password: hashedPassword,
-    role: dto.role ?? 'account-user',
+    role: dto.role ?? 'agency-owner',
     active: true,
     subaccountId: '',
   });

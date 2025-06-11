@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { AgenciesModule } from './agencies/agencies.module';
 
 @Module({
   imports: [
@@ -14,11 +15,8 @@ import { PassportModule } from '@nestjs/passport';
     MongooseModule.forRoot(process.env.MONGO_URI || 'mongodb://localhost:27017/AHD-DEV'),
     UsersModule,
     AuthModule,
-    PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1h' },
-    }),
+
+    AgenciesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -70,7 +70,7 @@ you can visualize the DB using:
 
 # 🚀 ahdigital Platform | Architecture
 
-> **Plateforme SaaS Multi-Tenant pour Agences Marketing** *(inspirée GoHighLevel)*
+> **Plateforme SaaS Multi-Tenant pour Agences Marketing**
 
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue.svg)](https://www.typescriptlang.org/)

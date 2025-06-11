@@ -21,7 +21,7 @@ export class User extends Document {
   @Prop({ required: false })
   password: string;
 
-  @Prop({ enum: UserRole, required: true ,default: 'agency-owner'})
+  @Prop({ enum: UserRole, required: true ,default: UserRole.AGENCY_OWNER})
   role: UserRole;
 
   @Prop({ type: String, ref: 'Agency' })
