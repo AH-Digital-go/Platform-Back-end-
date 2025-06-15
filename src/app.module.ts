@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AgenciesModule } from './agencies/agencies.module';
+import { SubaccountModule } from './subaccount/subaccount.module';
+import { AgencyContextMiddleware } from './common/middleware/agency-context.middleware';
 
 @Module({
   imports: [
@@ -17,10 +19,18 @@ import { AgenciesModule } from './agencies/agencies.module';
     AuthModule,
 
     AgenciesModule,
+
+    SubaccountModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 
   
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AgencyContextMiddleware)
+      .forRoutes('*'); // Apply globally or specify routes
+  }
+}

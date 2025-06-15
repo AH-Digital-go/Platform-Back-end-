@@ -18,6 +18,7 @@ import { CurrentUser } from 'src/common/decorators/current-user.decorator'; // C
 import { User, UserRole } from 'src/users/schemas/user.schema';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { MailService } from 'src/mail/mail.service';
+import { RegisterAgencyOwnerDto } from './dto/register-agency-owner';
 
 @Controller('auth')
 export class AuthController {
@@ -38,18 +39,24 @@ export class AuthController {
     return this.authService.login(user);
   }
 
-  @Post('register')
-  register(@Body() dto: CreateUserDto) {
-    console.log('DTO received in controller:', dto);
-    return this.authService.register(dto);
-  }
+  // @Post('register')
+  // register(@Body() dto: CreateUserDto) {
+  //   console.log('DTO received in controller:', dto);
+  //   return this.authService.register(dto);
+  // }
+
+@Post('register-agency-owner')
+async registerAgencyOwner(@Body() dto: RegisterAgencyOwnerDto) {
+  return this.authService.registerAgencyOwner(dto.user, dto.agency);
+}
 
 @Post('invite')
 // @UseGuards(JwtAuthGuard, RolesGuard) // optional: restrict to agency-admins
 async inviteUser(
-  @Body() dto: { email: string; role: UserRole },
+  @Body() dto: { email: string; role: UserRole; password: string },
 ): Promise<{ message: string }> {
-  await this.usersService.inviteUser(dto.email, dto.role);
+  const res = await this.usersService.inviteUser(dto.email, dto.role, dto.password);
+  console.log('==========Invite result:', res);
   return { message: 'User invited successfully. Check their email.' };
 }
 
