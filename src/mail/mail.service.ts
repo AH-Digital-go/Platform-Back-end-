@@ -50,6 +50,6 @@ export class MailService {
   `,
     });
 
-    console.log('Email sent:', inviteLink);
+    // console.log('Email sent:', inviteLink);
   }
 }

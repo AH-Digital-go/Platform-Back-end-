@@ -10,6 +10,6 @@ import { MailModule } from 'src/mail/mail.module';
 MailModule],
   providers: [UsersService],
   controllers: [UsersController],
-   exports: [UsersService],
+   exports: [UsersService,MongooseModule],
 })
 export class UsersModule {}

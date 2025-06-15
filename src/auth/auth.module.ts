@@ -9,16 +9,13 @@ import { User } from 'src/users/schemas/user.schema';
 import { MailModule } from 'src/mail/mail.module';
 import { PassportModule } from '@nestjs/passport'; 
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AgenciesModule } from 'src/agencies/agencies.module';
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }), 
-    // JwtModule.register({
-    //   secret: process.env.JWT_SECRET,
-    //   signOptions: { expiresIn: '1d' },
-    // }),
     JwtModule.registerAsync({
-      imports: [ConfigModule],
+      imports: [ConfigModule, AgenciesModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
@@ -29,6 +26,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     ConfigModule,
     MongooseModule.forFeature([{ name: User.name, schema: User }]), 
     MailModule,
+    AgenciesModule 
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
