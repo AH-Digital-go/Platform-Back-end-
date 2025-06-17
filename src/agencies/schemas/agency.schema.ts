@@ -24,13 +24,13 @@ export class Agency {
   @Prop()
   businessNiche?: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   country: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   timeZone: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   platformLanguage: string;
 
   @Prop()

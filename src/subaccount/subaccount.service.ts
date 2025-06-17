@@ -27,8 +27,8 @@ export class SubaccountService {
     return this.subaccountModel.find({ agencyId }).exec();
   }
 
-  async findOne(id: string): Promise<Subaccount> {
-    const subaccount = await this.subaccountModel.findById(id);
+  async findOne(_id: string): Promise<Subaccount> {
+    const subaccount = await this.subaccountModel.findById(_id);
     if (!subaccount) throw new NotFoundException('Subaccount not found');
     return subaccount;
   }

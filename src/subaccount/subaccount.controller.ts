@@ -38,10 +38,10 @@ export class SubaccountController {
     // console.log('🔍 from subaccount find all controller, agency: ', agencyId);
     return this.subaccountService.findAllByAgency(agencyId);
   }
-
+  
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.subaccountService.findOne(id);
+  findOne(@Param('id') _id: string) {
+    return this.subaccountService.findOne(_id);
   }
 
 //   @Roles('agency-owner', 'agency-admin')
