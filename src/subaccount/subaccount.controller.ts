@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Patch, Delete, Query, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch, Delete, Query, UseGuards, Req, ForbiddenException } from '@nestjs/common';
 import { SubaccountService } from './subaccount.service';
 import { CreateSubaccountDto } from './dto/create-subaccount.dto';
 import { UpdateSubaccountDto } from './dto/update-subaccount.dto';
@@ -40,7 +40,12 @@ export class SubaccountController {
   }
   
   @Get(':id')
-  findOne(@Param('id') _id: string) {
+  findOne(@Param('id') _id: string, @Req() req) {
+    console.log('[GET /subaccount/:id] - Hit route with user:', req.user);
+      const user = req.user;
+      if (user.role === 'account-user' && user.subaccountId !== _id) {
+    throw new ForbiddenException('You are not allowed to access this subaccount.');
+  }
     return this.subaccountService.findOne(_id);
   }
 

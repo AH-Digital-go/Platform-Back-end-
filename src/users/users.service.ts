@@ -39,10 +39,14 @@ async findByEmail(email: string): Promise<UserDocument | null> {
   //   return user;
   // }
 
-async inviteUser(email: string, role: UserRole, password:string): Promise<void> {
+async inviteUser(email: string, role: UserRole, password:string, subaccountId?: string): Promise<void> {
   const existing = await this.userModel.findOne({ email }).lean();
   if (existing) {
     throw new BadRequestException('User already exists');
+  }
+
+  if (role.startsWith('account') && !subaccountId) {
+    throw new BadRequestException('Subaccount ID is required for subaccount users');
   }
 
   const token = uuidv4();
@@ -51,9 +55,10 @@ async inviteUser(email: string, role: UserRole, password:string): Promise<void> 
     email,
     role,
     password,
-    status: 'invited',
-    mustChangePassword: true,
+    status: role.startsWith('account') ? 'invited' : 'active',
+    mustChangePassword: role.startsWith('account') ? true : false,
     inviteToken: token,
+    subaccountId: role.startsWith('account') ? subaccountId : null,
   });
 
   await user.save();
