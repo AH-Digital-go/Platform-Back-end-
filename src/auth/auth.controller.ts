@@ -53,9 +53,9 @@ async registerAgencyOwner(@Body() dto: RegisterAgencyOwnerDto) {
 @Post('invite')
 // @UseGuards(JwtAuthGuard, RolesGuard) // optional: restrict to agency-admins
 async inviteUser(
-  @Body() dto: { email: string; role: UserRole; password: string },
+  @Body() dto: { email: string; role: UserRole; password: string, subaccountId?: string },
 ): Promise<{ message: string }> {
-  const res = await this.usersService.inviteUser(dto.email, dto.role, dto.password);
+  const res = await this.usersService.inviteUser(dto.email, dto.role, dto.password, dto.subaccountId);
   console.log('==========Invite result:', res);
   return { message: 'User invited successfully. Check their email.' };
 }

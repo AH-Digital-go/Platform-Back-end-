@@ -1,5 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose, { Document, Types } from 'mongoose';
 
 export enum UserRole {
   AGENCY_OWNER = 'agency-owner',
@@ -28,8 +28,8 @@ password: string;
   @Prop({ type: String, ref: 'Agency' })
   agencyId: string;
 
-  @Prop({ type: String, ref: 'Subaccount', default: null })
-  subaccountId: string;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Subaccount', default: null })
+  subaccountId: Types.ObjectId | null;
 
   @Prop({ default: 'invited' })
   status: 'invited' | 'active';

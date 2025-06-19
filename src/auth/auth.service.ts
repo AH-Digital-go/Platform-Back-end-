@@ -96,6 +96,16 @@ export class AuthService {
       subaccountId: user.subaccountId?.toString() || null,
     };
 
+    console.log('🔑 Generating JWT for user:', payload);
+
+      // Add subaccountId only if role is subaccount-based
+  if (user.role.startsWith('account')) {
+    if (!user.subaccountId) {
+      throw new UnauthorizedException('No subaccount assigned to this user');
+    }
+    payload.subaccountId = user.subaccountId._id.toString();
+  }
+
     return {
       access_token: this.jwtService.sign(payload),
       user,
