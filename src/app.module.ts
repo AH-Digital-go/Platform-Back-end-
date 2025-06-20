@@ -11,7 +11,9 @@ import { AgenciesModule } from './agencies/agencies.module';
 import { SubaccountModule } from './subaccount/subaccount.module';
 import { AgencyContextMiddleware } from './common/middleware/agency-context.middleware';
 import { ContactsModule } from './contacts/contacts.module';
-import { EventsModule } from './events/events.module';
+import { CalendarModule } from './calendar/calendar.module';
+import { EventModule } from './event/event.module';
+
 
 @Module({
   imports: [
@@ -26,7 +28,10 @@ import { EventsModule } from './events/events.module';
 
     ContactsModule,
 
-    EventsModule,
+    CalendarModule,
+
+    EventModule,
+
   ],
   controllers: [AppController],
   providers: [AppService],
