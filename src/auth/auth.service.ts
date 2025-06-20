@@ -56,7 +56,8 @@ export class AuthService {
 
       // Log in the newly created user to get the JWT token
     const tokenResult = await this.login(user[0]);
-
+console.log('TOKEN RESULT:', tokenResult);
+console.log('USER:', user[0]);
     return {
       user: user[0],
       agency: agency[0],

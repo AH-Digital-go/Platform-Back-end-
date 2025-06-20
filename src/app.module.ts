@@ -10,6 +10,8 @@ import { PassportModule } from '@nestjs/passport';
 import { AgenciesModule } from './agencies/agencies.module';
 import { SubaccountModule } from './subaccount/subaccount.module';
 import { AgencyContextMiddleware } from './common/middleware/agency-context.middleware';
+import { ContactsModule } from './contacts/contacts.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -21,6 +23,10 @@ import { AgencyContextMiddleware } from './common/middleware/agency-context.midd
     AgenciesModule,
 
     SubaccountModule,
+
+    ContactsModule,
+
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
